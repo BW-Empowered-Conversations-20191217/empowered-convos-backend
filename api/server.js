@@ -12,6 +12,6 @@ configureMiddleware(server);
 
 server.use('/api', apiRouter);
 server.use('/api/users', usersRouter);
-server.use('/api/message', messageRouter);
+server.use('/api/messages', messageRouter);
 
 module.exports = server;
