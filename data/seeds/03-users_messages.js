@@ -1,4 +1,3 @@
-
 exports.seed = function(knex) {
   return knex('users_messages').truncate()
     .then(function () {
@@ -12,3 +11,4 @@ exports.seed = function(knex) {
       ]);
     });
 };
+
