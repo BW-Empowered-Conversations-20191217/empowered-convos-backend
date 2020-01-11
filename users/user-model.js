@@ -11,6 +11,12 @@ function findUserById(id){
         .first();
 }
 
+function findBy(filter) {
+    return db('users')
+    .select('id', 'userName', 'password')
+    .where(filter);
+}
+
 function addUser(user){
     return db('users').insert(user);
 }
@@ -27,6 +33,7 @@ function deleteUser(id){
 module.exports = {
     findUser,
     findUserById,
+    findBy,
     addUser,
     updateUser,
     deleteUser
