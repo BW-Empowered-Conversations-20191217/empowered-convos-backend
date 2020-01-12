@@ -1,10 +1,12 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
+
 const Users = require('./user-model');
+const restricted = require('../auth/restricted-middleware');
+const checkRole = require('../auth/check-role-middleware');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', restricted, (req, res) => {
     Users.findUser()
         .then(user => {
             res.json(user);
@@ -75,41 +77,5 @@ router.delete('/:id', (req, res) => {
         });
 });
 
-
-//Register & Login Functions
-router.post('/register', (req, res) => {
-    const user = req.body;
-    //hash password
-    const hash = bcrypt.hashSync(user.password, 8);
-    //override plain text password
-    user.password = hash;
-    Users.addUser(user)
-        .then(newUser => {
-            res.status(201).json({created: newUser})
-        })
-        .catch(err => {
-            res.status(500).json({
-                message: "Failed to create new user"
-            });
-        });
-});
-
-//Login
-router.post('/', (req, res) => {
-    let { userName, password } = req.body;
-  
-    Users.findBy({ userName })
-      .first()
-      .then(user => {
-        if (user && bcrypt.compare(password, user.password)) {
-          res.status(200).json({ message: `Welcome ${user.userName}!` });
-        } else {
-          res.status(401).json({ message: 'Invalid Credentials' });
-        }
-      })
-      .catch(err => {
-        res.status(500).json(err);
-      });
-  });
 
 module.exports = router;
